@@ -1,0 +1,8 @@
+export("read_pvals_ws")
+export("genome_order")
+export("read2_paths_ws")
+export("genome_permutation_ws")
+export("genome_permutation")
+export("get_results_ws")
+export("get_results")
+importFrom("stats",phyper)
