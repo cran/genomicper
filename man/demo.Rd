@@ -5,7 +5,8 @@
 GWAS p_values demo data
 }
 \description{
-GWAS p_values (tab delimited file). First Column must contain the SNP ids and the column name = "name"
+GWAS p-values (tab delimited file). 
+First Column must contain the SNP ids and the column name = "name"
 }
 \usage{data(demo)}
 \format{
@@ -31,7 +32,7 @@ GWAS p_values (tab delimited file). First Column must contain the SNP ids and th
   }
 }
 \examples{
-data(demo)
-## use: input file for "read_pvals_fun" function
+# data(demo)
+## use: input file for "read_pvals" function
 }
 \keyword{datasets}
