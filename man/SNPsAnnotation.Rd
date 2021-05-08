@@ -29,6 +29,6 @@ SNPs annotated to genes. Annotation only when the SNPs fall within start and end
 NCBI Gene database,(http://www.ncbi.nlm.nih.gov/gene ; Build.37.1).
 }
 \examples{
-# data(SNPsAnnotation)
+data(SNPsAnnotation)
 }
 \keyword{datasets}

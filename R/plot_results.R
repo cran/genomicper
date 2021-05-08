@@ -15,28 +15,40 @@ paths <- as.character(unique(results[,1]))
 ntraits <- length(traits)
 npaths <- length(paths)
 onefile=TRUE
-if(by != "trait" && by != "set"){
+if(by != "trait"){
+if(by != "set"){
 stop("Argument \"by\" must be set to \"trait\" or \"set\"")
 }
-    if(by == "trait" && npaths < 5){
-    stop("Number of sets for qq plot must be more than 5")
+}
+    if(by == "trait"){
+if(npaths < 5){
+stop("Number of sets for qq plot must be more than 5")
+}
     }
-    if(by == "set" && ntraits < 5){
-        stop("Number of traits for qq plot must be more than 5")
+    if(by == "set"){
+if(ntraits < 5){
+stop("Number of traits for qq plot must be more than 5")
+}
     }
-    if(plot_all == TRUE && save_plot == FALSE){
-    stop("If plot_all is set to TRUE, the plots must be saved in working directory (\"save_plot=TRUE\")") 
+    if(plot_all == TRUE){
+if(save_plot == FALSE){
+stop("If plot_all is set to TRUE, the plots must be saved in working directory (\"save_plot=TRUE\")") 
+}
 }
     if(plot_all == FALSE){
     if(var==""){
     stop("Argument \"var\" missing. Select a name of a set or trait to plot")
     }
-    if(var %in% traits == FALSE && var %in% paths == FALSE){
-    stop("Variable \"var\" not found in results")
+    if(var %in% traits == FALSE){
+if(var %in% paths == FALSE){
+stop("Variable \"var\" not found in results")
+}
     }
 }
-    if(save_plot == TRUE && missing(plot_name) == TRUE) {
-        plot_name <- "Results_genomicper"
+    if(save_plot == TRUE){
+if(missing(plot_name) == TRUE) {
+plot_name <- "Results_genomicper"
+}
     }
 rp <- which(results[,5]== 0)
 if(length(rp)!= 0){
@@ -46,7 +58,8 @@ results[,1]<-as.character(results[,1])
 results[,2]<-as.character(results[,2])
 results[,5]<-as.numeric(as.character(results[,5]))
 qq_data <- ""
-if(by == "trait" && plot_all == TRUE){
+if(by == "trait"){
+if(plot_all == TRUE){
 bf1 <- (0.05/npaths)
 mxx <- -log10(.5/npaths)
 mxy <- -log10(results[which.max(-log10(results[,5])),5])
@@ -75,7 +88,9 @@ abline(h=-log10(bf1),col="blue",cex=1.2)
 }
 dev.off()
 }
-if(by == "trait" && plot_all == FALSE){
+}
+if(by == "trait"){
+if(plot_all == FALSE){
 bf1 <- (0.05/npaths)
 mxx <- -log10(.5/npaths)
 if(save_plot==TRUE){
@@ -109,7 +124,9 @@ if(save_plot==TRUE){
 dev.off()
 }
 }
-if(by == "set" && plot_all == TRUE){
+}
+if(by == "set"){
+if(plot_all == TRUE){
 bf1 <- (0.05/ntraits)
 mxx <- -log10(.5/ntraits)
 mxy <- -log10(results[which.max(-log10(results[,5])),5])
@@ -138,7 +155,9 @@ abline(h=-log10(bf1),col="blue",cex=1.2)
 }
 dev.off()
 }
-if(by == "set" && plot_all == FALSE){
+}
+if(by == "set"){
+if(plot_all == FALSE){
 bf1 <- (0.05/ntraits)
 mxx <- -log10(.5/ntraits)
 if(save_plot==TRUE){
@@ -171,6 +190,7 @@ abline(h=-log10(bf1),col="blue",cex=1.2)
 identify(expL,empL,labels=temp[,2])
 if(save_plot==TRUE){
 dev.off()
+}
 }
 }
 if(save_qq==TRUE){

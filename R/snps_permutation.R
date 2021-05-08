@@ -1,6 +1,6 @@
 snps_permutation <-
 function (ordered_alldata = "", pers_ids = "", ntraits = "", 
-    nper = 100, threshold = 0.05, saveto = "workspace",gs_locs="",envir = "") 
+    nper = 100, threshold = 0.05, seed=10, saveto = "workspace",gs_locs="",envir = "") 
 {
     print("Arguments")
     print(paste("Ordered dataset: ", substitute(ordered_alldata), 
@@ -11,12 +11,15 @@ function (ordered_alldata = "", pers_ids = "", ntraits = "",
     print(paste("Number of permutations: ", nper))
     print(paste("Threshold: ", threshold))
     print(paste("Permutation Results save to: ", substitute(saveto)))
-    if (saveto != "workspace" && saveto != "directory") {
-        stop("Define where are the results to be saved: \"saveto\"=\"workspace\" OR \"directory\"")
+    if (saveto != "workspace"){
+if(saveto != "directory") {
+         stop("Define where are the results to be saved: \"saveto\"=\"workspace\" OR \"directory\"")
+}
     }
     ntraits <- as.numeric(ntraits)
     nper <- as.numeric(nper)
     threshold <- as.numeric(threshold)
+set.seed(as.numeric(seed), kind = "Mersenne-Twister")
     temp <- ordered_alldata[, c(1:6, ntraits)]
     ns <- which(pers_ids != "NULL")
     if (length(ns) == 0) {
@@ -25,7 +28,6 @@ function (ordered_alldata = "", pers_ids = "", ntraits = "",
     pers_ids <- pers_ids[ns]
     paths_list <- names(pers_ids)
     mx_rs <- dim(temp)[1]
-    set.seed(10, kind = "Mersenne-Twister")
     sd <- round(runif(nper, 1, mx_rs))
     rowsf <- dim(gs_locs)[1]
     tname <- NULL

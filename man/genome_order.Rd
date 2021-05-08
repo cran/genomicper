@@ -50,7 +50,7 @@ Gene annotations, location indexes and number of observations
 \preformatted{	
 	SNPs annotated to Genes and Trait p-values
 #ordered_alldata[1:5,1:8]
-name   Chromosome	Location GENE_ID  Symbol Orientation abpi abpilba
+name   Chromosome	Location GENE_ID  Symbol Orientation Trait1 Trait2
 rs3934834	1  		1005806  NA     <NA>        <NA>  	 0.97  0.92
 rs3737728	1		1021415  54991 	C1orf159      - 	 0.91  0.69
 rs6687776	1		1030565  54991  C1orf159      - 	 0.71  0.45
@@ -72,14 +72,13 @@ rs4970405	1		1048955  54991  C1orf159      - 	 0.77  0.56
 }
 \examples{
 
-## DEMO / WORKSPACE #######################################
+## DEMO WORKSPACE 
+
 data(demo,SNPsAnnotation)
 all_data<-read_pvals(data_name=demo,snps_ann=SNPsAnnotation)
 # GENOME ORDER
 genome_results <- genome_order(all_data=all_data)
-
-ordered_alldata <- genome_results$ordered_alldata
-gs_locs <- genome_results$gs_locs
-######################################################
+	ordered_alldata <- genome_results$ordered_alldata
+	gs_locs <- genome_results$gs_locs
 }
 \keyword{ genome_order }

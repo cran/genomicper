@@ -11,7 +11,7 @@ to each element in the gene-set. The permutation method must be defined (i.e. le
 }
 \usage{
 read2_paths(ordered_alldata="",gs_locs="",sets_from="workspace",
-sets_prefix="hsa",level="snp",envir="")
+sets_prefix="RHSA",level="snp",envir="")
 }
 \arguments{
   \item{ordered_alldata}{
@@ -33,8 +33,8 @@ sets_prefix="hsa",level="snp",envir="")
 }
   \item{sets_prefix}{
  Prefix of the gene-set variables or files.\cr
- Default set to sets_prefix= "hsa" 
- e.g. Variables "hsa00010","hsa00020". OR files "hsaXXXXX.txt"\cr
+ Default set to sets_prefix= "RHSA" 
+ e.g. Variables "RHSA164843","RHSA446343","RHSA8876384"\cr
  each variable/file contains the list of gene identifiers part of that pathway
 }
   \item{level}{
@@ -57,7 +57,7 @@ sets_prefix="hsa",level="snp",envir="")
 \section{Format}{
 \preformatted{
 Input: Ordered_alldata
-name     Chromosome  Location GENE_ID   Symbol Orientation abpi abpilba
+name     Chromosome  Location GENE_ID   Symbol Orientation Trait1 Trait2
 rs1001567          1 9194614     <NA>     <NA>        <NA> 0.96 0.89
 rs1000313          1 15405489   23254 KIAA1026           + 0.93 0.57
 rs1002365          1 19797248    <NA>     <NA>        <NA> 0.68 0.58
@@ -71,14 +71,18 @@ Input:gs_locs
  [3,] "ANK2"   "4"        "113830885" "287"   "479"      "4"
  
 Input:pathway example
-hsa04720
- [1]  10411    107  11261    114   1387 163688   ....
+RHSA8964572
+[1]   1149 128486 161247  29923 345275  63924
           
 Output:pathways
-ID         Name                           GenesInPath GenesFound SNPsInPath
-"hsa00010" "Glycolysis / Gluconeogenesis" "  66"      "1"        "1"       
-"hsa00020" "Citrate cycle (TCA cycle)"    "  31"      "0"        "0"       
-"hsa00030" "Pentose phosphate pathway"    "  27"      "1"        "1"       
+     ID            GenesInPath GenesFound SNPsInPath
+"RHSA109582"  "681"       "8"        "11"      
+"RHSA1474244" "418"       "7"        "10"      
+"RHSA164843"  "11"        "0"        "0"       
+"RHSA446343"  "4"         "1"        "1"       
+"RHSA8876384" "32"        "1"        "1"       
+"RHSA8964572" "6"         "1"        "1"       
+
 }
 }
 \seealso{
@@ -92,15 +96,19 @@ ID         Name                           GenesInPath GenesFound SNPsInPath
 data(demo,SNPsAnnotation)
 all_data <- read_pvals(data_name=demo,snps_ann=SNPsAnnotation)
 genome_results <-genome_order(all_data=all_data)
-ordered_alldata <- genome_results$ordered_alldata
-gs_locs <- genome_results$gs_locs
-data(hsa00100,hsa00120,hsa00130,hsa00140,hsa00190,hsa02010)
+	ordered_alldata <- genome_results$ordered_alldata
+	gs_locs <- genome_results$gs_locs
+	
+# Create new environment to save variables (e.g. pathways, permutations):
+gper.env <- new.env()
+
+data(RHSA164843,RHSA446343,RHSA8876384,RHSA8964572,RHSA109582,RHSA1474244,envir=gper.env)
 
 paths_res <- read2_paths(ordered_alldata=ordered_alldata,
-gs_locs=gs_locs,sets_from="workspace",sets_prefix="hsa",
-level="snp",envir=.GlobalEnv)		
-pers_ids <- paths_res$per_ors
-pathways<- paths_res$pathways
+gs_locs=gs_locs,sets_from="workspace",sets_prefix="RHSA",
+level="snp",envir=gper.env)		
+	pers_ids <- paths_res$per_ors
+	pathways<- paths_res$pathways
 ####################################################################
 }
 \keyword{ gene-set }

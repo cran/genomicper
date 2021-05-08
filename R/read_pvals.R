@@ -5,21 +5,17 @@ function (data_name = "", snps_ann = "", from = "workspace")
     print(substitute(data_name))
     print(substitute(snps_ann))
     print(from)
-    if (from != "workspace" && from != "directory") {
-        stop("Argument \"from\" must be set to \"workspace\" or \"directory\"")
-    }
-    if (from == "workspace" && class(data_name) == "character") {
-        stop("Argument \"from\" set to workspace")
-    }
-    if (from == "directory" && class(data_name) != "character") {
-        stop("Argument \"from\" set to directory")
-    }
-    if (missing(data_name) == TRUE || data_name == "") {
+    if (from != "workspace"){
+if(from != "directory") {
+stop("Argument \"from\" must be set to \"workspace\" or \"directory\"")
+}
+}
+    if (missing(data_name) == TRUE){
         stop("Argument data_name (GWAS p-values) missing")
     }
-    if (missing(snps_ann) == TRUE || snps_ann == "") {
+    if (missing(snps_ann) == TRUE ){
         stop("Argument snps_ann (SNPs location) missing")
-    }
+}
     if (from == "workspace") {
         data <- data_name
         all_snps <- snps_ann

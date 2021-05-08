@@ -6,14 +6,14 @@
 Circular Genomic Permutations
 }
 \description{
-Description: Circular genomic permutation approach uses GWAS results to establish the significance of pathway/gene-set associations whilst accounting for genomic structure. All SNPs in the GWAS are placed in a 'circular genome' according to their location. Then the complete set of SNP association p-values are permuted by rotation with respect to the SNPs' genomic locations. Two testing frameworks are available: permutations at the gene level, and permutations at the SNP level. The permutation at the gene level uses fisher's combination test to calculate a single gene p-value, followed by the hypergeometric test. The SNP count methodology maps each SNP to pathways/gene-sets and calculates the proportion of SNPs for the real and the permutated datasets above a pre-defined threshold. Genomicper requires a matrix of GWAS association p-values. The SNPs annotation and pathways annotations can be performed within the package or provided by the user.
+Description: Circular genomic permutation approach uses genome wide association studies (GWAS) results to establish the significance of pathway/gene-set associations whilst accounting for genomic structure. All single nucleotide polymorphisms (SNPs) in the GWAS are placed in a 'circular genome' according to their location. Then the complete set of SNP association p-values are permuted by rotation with respect to the SNPs' genomic locations. Two testing frameworks are available: permutations at the gene level, and permutations at the SNP level. The permutation at the gene level uses Fisher's combination test to calculate a single gene p-value, followed by the hypergeometric test. The SNP count methodology maps each SNP to pathways/gene-sets and calculates the proportion of SNPs for the real and the permutated datasets above a pre-defined threshold. Genomicper requires a matrix of GWAS association p-values and SNPs annotation to genes. Pathways can be obtained from within the package or can be provided by the user.
 }
 \details{
 \tabular{ll}{
 Package: \tab genomicper\cr
 Type: \tab Package\cr
-Version: \tab 1.5\cr
-Date: \tab 2016-07-04\cr
+Version: \tab 1.7\cr
+Date: \tab 2020-05-06\cr
 License: \tab GPL-2\cr
 }
 }
@@ -50,14 +50,14 @@ Genomicper functions:
 #  Genomicper functions                                            ##########
 # 1)  read_pvals(data_name="",snps_ann="")
 # 2)  genome_order(all_data="")
-# 3)  get_pathways(source="",all_paths="")
-# 4)  read2_paths(ordered_alldata="",gs_locs="",sets_from="",sets_prefix="",level="")
+# 3)  get_pathways(source="reactome",all_paths="",envir="")
+# 4)  read2_paths(ordered_alldata="",gs_locs="",sets_from="",sets_prefix="RHSA",level="")
 # 5A) snps_permutation(ordered_alldata="",pers_ids="",ntraits="",nper="",saveto="",
-#		threshold="",gs_locs=gs_locs,gper.env = gper.env)	
+#		threshold="",gs_locs=gs_locs,envir = "")	
 # 5B) genes_permutation(ordered_alldata="",pers_ids="",pathways="",
-#		ntraits="",nper="",threshold="",saveto="",gs_locs=gs_locs,gper.env = gper.env)
+#		ntraits="",nper="",threshold="",saveto="",gs_locs=gs_locs,envir = "")
 # 6)  get_results(res_pattern="Permus",level="snp",from="workspace",
-#		threshold=0.05, gper.env = gper.env)
+#		threshold=0.05, envir = "")
 # 7) plot_results(results = "", by = "", plot_all = TRUE, var = "", save_plot = TRUE, 
 # 						plot_name = "", bf = FALSE, save_qq = TRUE)  
 #############################################################################
@@ -67,38 +67,42 @@ Genomicper functions:
 # SNPs annotation and Pathways provided by user
 # all data stored at the WORKSPACE
 
-#library(genomicper)
 ### Load files for analysis
 data(demo,SNPsAnnotation)
-# load pathways
-data(hsa00100,hsa00120,hsa00130,hsa00140,hsa00190,hsa02010)
-
 
 # Read & format GWAS pvalues
 all_data <- read_pvals(data_name=demo,snps_ann=SNPsAnnotation)
+
 # Order data according to the genome
 genome_results <-genome_order(all_data=all_data)
-# Results from genome_order
+	# Results from genome_order
 	ordered_alldata <- genome_results$ordered_alldata
 	gs_locs <- genome_results$gs_locs
+
+# Create new environment to save variables (e.g. pathways, permutations):
+gper.env <- new.env()
+
+# Pathways can be downloaded using the function get_pathways()  
+# Load example pathways into the new environment. 
+data(RHSA164843,RHSA446343,RHSA8876384,RHSA8964572,RHSA109582,RHSA1474244,envir=gper.env)
+
 # Map SNPs to pathways 
 paths_res <- read2_paths(ordered_alldata=ordered_alldata,
-gs_locs=gs_locs,sets_from="workspace",sets_prefix="hsa",
-level="snp",envir=.GlobalEnv)
-# Results from read2_paths:		
-  pers_ids <- paths_res$per_ors
-  pathways<- paths_res$pathways
+gs_locs=gs_locs,sets_from="workspace",sets_prefix="RHSA",
+level="snp",envir=gper.env)
+	# Results from read2_paths:		
+	pers_ids <- paths_res$per_ors
+	pathways<- paths_res$pathways
 
-# Create new environment to save the permutations to:
-gper.env <- new.env()
-  
 # Perform permutations:
 snps_permutation(ordered_alldata=ordered_alldata,
 pers_ids=pers_ids,ntraits=c(7:13),nper=10,saveto="workspace",
 threshold=0.05,gs_locs=gs_locs,envir = gper.env)		  
+
 # Get results						
 results <- get_results(res_pattern="Permus",level="snp",
 from="workspace",threshold=0.05,envir = gper.env)
+
 # Plot results
 \dontrun{
 #saves plots to working directory
@@ -110,7 +114,7 @@ plot_all=FALSE,var="trait1")
 # IMPORTANT: to EXIT interactive plot, RIGHT CLICK on the
 # plot and STOP.
 qq <- plot_results(results=results,by="set",plot_all=FALSE,
-var="hsa00100",save_plot=FALSE)
+var="RHSA109582",save_plot=FALSE)
 }
 # -- END OF DEMO 
 ###############################################
